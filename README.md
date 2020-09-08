@@ -1,6 +1,6 @@
 # prefix
 
-:smile: prefix
+🔴 prepend numbers, stats, dates, durations to streams
 
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/moul.io/prefix)
 [![License](https://img.shields.io/badge/license-Apache--2.0%20%2F%20MIT-%2397ca00.svg)](https://github.com/moul/prefix/blob/master/COPYRIGHT)
