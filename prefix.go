@@ -2,16 +2,21 @@ package prefix
 
 import (
 	"bytes"
+	"fmt"
 	"text/template"
 
 	"github.com/Masterminds/sprig"
 )
 
-const DefaultFormat = `{{printf "%-3d" .LineNumber}} `
+/// Public API
+
+const DefaultFormat = `{{.LineNumber3}} `
 
 type LinePrefixer interface {
 	PrefixLine(string) string
 }
+
+/// Main implementation
 
 type linePrefixer struct {
 	Format     string
@@ -40,3 +45,9 @@ func (p *linePrefixer) PrefixLine(line string) string {
 	_ = p.t.Execute(&prefix, p)
 	return prefix.String() + line
 }
+
+/// Template helpers
+
+func (p *linePrefixer) LineNumber3() string { return fmt.Sprintf("%-3d", p.LineNumber) }
+func (p *linePrefixer) LineNumber4() string { return fmt.Sprintf("%-4d", p.LineNumber) }
+func (p *linePrefixer) LineNumber5() string { return fmt.Sprintf("%-5d", p.LineNumber) }
