@@ -2,8 +2,9 @@ package prefix
 
 import (
 	"bytes"
-
 	"text/template"
+
+	"github.com/Masterminds/sprig"
 )
 
 const DefaultFormat = `{{printf "%-3d" .LineNumber}} `
@@ -20,11 +21,16 @@ type linePrefixer struct {
 }
 
 func New(format string) LinePrefixer {
+	funcMap := template.FuncMap{}
+	for k, v := range sprig.FuncMap() {
+		funcMap[k] = v
+	}
+
 	return &linePrefixer{
 		Format:     DefaultFormat,
 		LineNumber: 0,
 
-		t: template.Must(template.New("").Parse(format)),
+		t: template.Must(template.New("").Funcs(funcMap).Parse(format)),
 	}
 }
 
