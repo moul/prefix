@@ -1,6 +1,6 @@
-GOPKG ?=	moul.io/golang-repo-template
-DOCKER_IMAGE ?=	moul/golang-repo-template
-GOBINS ?=	.
+GOPKG ?=	moul.io/prefix
+DOCKER_IMAGE ?=	moul/prefix
+GOBINS ?=	./cmd/prefix
 NPM_PACKAGES ?=	.
 
 include rules.mk
