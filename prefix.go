@@ -6,7 +6,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/Masterminds/sprig"
+	sprig "github.com/Masterminds/sprig/v3"
 	"moul.io/u"
 )
 
