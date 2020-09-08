@@ -21,23 +21,30 @@ func main() {
 }
 
 func run(args []string) error {
-	var input io.Reader
+	flags := flag.NewFlagSet("prefix", flag.ExitOnError)
+	format := flags.String("format", prefix.DefaultFormat, "format string")
+	if err := flags.Parse(args[1:]); err != nil {
+		return err
+	}
 
 	// parse args
+	var input io.Reader
 	{
+		remainingArgs := flags.Args()
+		fmt.Println(remainingArgs)
 		switch {
-		case len(args) == 1:
+		case len(remainingArgs) == 0:
 			input = os.Stdin
-		case len(args) == 2 && args[1] == "-":
+		case len(remainingArgs) == 1 && remainingArgs[0] == "-":
 			input = os.Stdin
-		case len(args) == 2:
-			f, err := os.Open(args[1])
+		case len(remainingArgs) == 1:
+			f, err := os.Open(remainingArgs[0])
 			if err != nil {
 				return err
 			}
 			defer f.Close()
 			input = f
-		case len(args) > 3:
+		case len(remainingArgs) > 2:
 			return fmt.Errorf("usage: prefix FILE")
 		}
 	}
@@ -45,7 +52,7 @@ func run(args []string) error {
 	// configure prefixer
 	var prefixer prefix.LinePrefixer
 	{
-		prefixer = prefix.New(prefix.DefaultFormat)
+		prefixer = prefix.New(*format)
 	}
 
 	// stream and prefix input
