@@ -31,7 +31,6 @@ func run(args []string) error {
 	var input io.Reader
 	{
 		remainingArgs := flags.Args()
-		fmt.Println(remainingArgs)
 		switch {
 		case len(remainingArgs) == 0:
 			input = os.Stdin

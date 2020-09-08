@@ -12,5 +12,5 @@ require (
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	go.uber.org/goleak v1.1.10
-	moul.io/u v1.8.0
+	moul.io/u v1.9.0
 )
