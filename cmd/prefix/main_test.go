@@ -1,8 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
-	"os"
 	"testing"
 
 	"go.uber.org/goleak"
@@ -10,25 +8,14 @@ import (
 )
 
 func TestRun(t *testing.T) {
-	// create temp file with some content
-	var tmpfilePath string
-	{
-		content := []byte("AAA\nBBB\nCCC")
-		tmpfile, err := ioutil.TempFile("", "example")
-		checkErr(err)
-		_, err = tmpfile.Write(content)
-		checkErr(err)
-		err = tmpfile.Close()
-		checkErr(err)
-		defer os.Remove(tmpfile.Name())
-		tmpfilePath = tmpfile.Name()
-	}
+	f, cleanup := u.MustTempfileWithContent([]byte("AAA\nBBB\nCCC"))
+	defer cleanup()
 
 	// capture stdout and stderr
 	closer := u.MustCaptureStdoutAndStderr()
 
 	// simulate CLI call
-	err := run([]string{"prefix", tmpfilePath})
+	err := run([]string{"prefix", "-format", "{{.LineNumber3}} ", f.Name()})
 	if err != nil {
 		t.Fatalf("err should be nil: %v", err)
 	}
@@ -42,8 +29,8 @@ func Example() {
 	defer cleanup()
 
 	// simulate normal CLI:
-	//    $> prefix /path/to/tempfile
-	err := run([]string{"prefix", f.Name()})
+	//    $> prefix -format "{{.LineNumber3}}" /path/to/tempfile
+	err := run([]string{"prefix", "-format", "{{.LineNumber3}} ", f.Name()})
 	if err != nil {
 		panic(err)
 	}

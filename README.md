@@ -20,6 +20,58 @@
 ## Usage
 
 TODO
+[embedmd]:# (.tmp/usage.txt console)
+```console
+$> prefix -h
+Usage of prefix:
+  -format string
+    	format string (default "{{.LineNumber3}} upt={{.Uptime}} dur={{.Duration}} ")
+```
+
+[embedmd]:# (.tmp/example-1.txt console)
+```console
+$> generate-fake-data | prefix -format="#{{.LineNumber3}} {{.Uptime}} {{.Duration}} | "
+#1   82.3µs  88.9µs  | At illum ut est sit soluta nulla numquam.
+#2   113.6ms 113.6ms | Sunt quaerat ea dolores facere deleniti culpa numquam.
+#3   328.7ms 215.1ms | Distinctio maxime consequatur est qui corporis sunt officia.
+#4   607.1ms 278.3ms | Et quia odit molestias voluptas porro repellendus magnam.
+#5   899.3ms 292.2ms | Corporis eos rem non hic esse optio quisquam.
+#6   1.1s    211.7ms | Natus earum molestias iste architecto porro et blanditiis.
+#7   1.3s    238.1ms | Eum repellendus nostrum qui eius suscipit fugit quia.
+#8   1.4s    50.4ms  | Et nesciunt quod fuga ut vel pariatur libero.
+#9   1.6s    209.9ms | Rerum omnis soluta facilis voluptatem possimus et voluptas.
+#10  1.9s    274.7ms | Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
+```
+
+[embedmd]:# (.tmp/example-2.txt console)
+```console
+$> generate-fake-data | prefix -format="{{.LineNumber3}} "
+1   At illum ut est sit soluta nulla numquam.
+2   Nobis sunt quaerat ea dolores facere deleniti culpa.
+3   Numquam ut distinctio maxime consequatur est qui corporis.
+4   Sunt officia odit et quia odit molestias voluptas.
+5   Porro repellendus magnam ipsa corporis eos rem non.
+6   Hic esse optio quisquam hic natus earum molestias.
+7   Iste architecto porro et blanditiis iste eum repellendus.
+8   Nostrum qui eius suscipit fugit quia quo et.
+9   Nesciunt quod fuga ut vel pariatur libero sequi.
+10  Rerum omnis soluta facilis voluptatem possimus et voluptas.
+```
+
+[embedmd]:# (.tmp/example-3.txt console)
+```console
+$> generate-fake-data | prefix -format=">>> "
+>>> At illum ut est sit soluta nulla numquam.
+>>> Nobis sunt quaerat ea dolores facere deleniti culpa.
+>>> Numquam ut distinctio maxime consequatur est qui corporis.
+>>> Sunt officia odit et quia odit molestias voluptas.
+>>> Porro repellendus magnam ipsa corporis eos rem non.
+>>> Hic esse optio quisquam hic natus earum molestias.
+>>> Iste architecto porro et blanditiis iste eum repellendus.
+>>> Nostrum qui eius suscipit fugit quia quo et.
+>>> Nesciunt quod fuga ut vel pariatur libero sequi.
+>>> Rerum omnis soluta facilis voluptatem possimus et voluptas.
+```
 
 ## Install
 
