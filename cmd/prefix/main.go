@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"sort"
 
 	"moul.io/prefix"
 )
@@ -20,9 +21,14 @@ func main() {
 	}
 }
 
+var (
+	flags  = flag.NewFlagSet("prefix", flag.ExitOnError)
+	format = flags.String("format", "{{DEFAULT}} ", "format string")
+)
+
 func run(args []string) error {
-	flags := flag.NewFlagSet("prefix", flag.ExitOnError)
-	format := flags.String("format", prefix.DefaultFormat, "format string")
+	flags.Usage = usage
+
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
@@ -63,4 +69,61 @@ func run(args []string) error {
 		}
 	}
 	return nil
+}
+
+func usage() {
+	// usage
+	{
+		fmt.Fprintln(os.Stderr, `USAGE`)
+		fmt.Fprintln(os.Stderr, `  prefix [flags] file`)
+		fmt.Fprintln(os.Stderr)
+	}
+
+	// flags
+	{
+		fmt.Fprintln(os.Stderr, `FLAGS`)
+		flags.PrintDefaults()
+		fmt.Fprintln(os.Stderr)
+	}
+
+	// syntax
+	{
+		fmt.Fprintln(os.Stderr, `SYNTAX`)
+		keys := []string{}
+		for key := range prefix.AvailablePatterns {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			fmt.Fprintf(os.Stderr, "  %-35s %s\n", key, prefix.AvailablePatterns[key])
+		}
+		fmt.Fprintln(os.Stderr)
+		fmt.Fprintln(os.Stderr, "  the following helpers are also available:")
+		fmt.Fprintln(os.Stderr, "  - from the text/template library    https://golang.org/pkg/text/template/")
+		fmt.Fprintln(os.Stderr, "  - from the sprig project            https://github.com/masterminds/sprig#usage")
+		fmt.Fprintln(os.Stderr)
+	}
+
+	// presets
+	{
+		fmt.Fprintln(os.Stderr, `PRESETS`)
+		keys := []string{}
+		for key := range prefix.AvailablePresets {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			fmt.Fprintf(os.Stderr, "  %-20s %s\n", key, prefix.AvailablePresets[key])
+		}
+		fmt.Fprintln(os.Stderr)
+	}
+
+	// examples
+	{
+		fmt.Fprintln(os.Stderr, `EXAMPLES`)
+		fmt.Fprintln(os.Stderr, `  prefix apache.log`)
+		fmt.Fprintln(os.Stderr, `  prefix -format=">>>" apache.log`)
+		fmt.Fprintln(os.Stderr, `  tail -f apache.log | prefix -`)
+		fmt.Fprintln(os.Stderr, `  my-cool-program 2>&1 | prefix -format="#{{.LineNumber5}} " -`)
+	}
 }
