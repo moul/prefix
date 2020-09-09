@@ -12,7 +12,7 @@ import (
 
 /// Public API
 
-const DefaultFormat = `{{.LineNumber3}} `
+const DefaultFormat = `{{.LineNumber3}} upt={{.Uptime}} dur={{.Duration}} `
 
 type LinePrefixer interface {
 	PrefixLine(string) string
