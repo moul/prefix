@@ -15,7 +15,7 @@ func TestRun(t *testing.T) {
 	closer := u.MustCaptureStdoutAndStderr()
 
 	// simulate CLI call
-	err := run([]string{"prefix", "-format", "{{.LineNumber3}} ", f.Name()})
+	err := run([]string{"prefix", "-format", "{{DEFAULT}} ", f.Name()})
 	if err != nil {
 		t.Fatalf("err should be nil: %v", err)
 	}
