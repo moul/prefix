@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"testing"
 
 	"go.uber.org/goleak"
@@ -39,6 +40,35 @@ func Example() {
 	// 1   AAA
 	// 2   BBB
 	// 3   CCC
+}
+
+// no output (everything is in stderr)
+func Example_usage() {
+	err := run([]string{"prefix", "-h"})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func TestUsage(t *testing.T) {
+	// capture stdout and stderr
+	closer := u.MustCaptureStdoutAndStderr()
+
+	// simulate CLI call
+	err := run([]string{"prefix", "-h"})
+	if err != nil {
+		t.Fatalf("err should be nil: %v", err)
+	}
+
+	// ignore output in this test
+	output := closer()
+	if !strings.Contains(output, "USAGE") ||
+		!strings.Contains(output, "FLAGS") ||
+		!strings.Contains(output, "SYNTAX") ||
+		!strings.Contains(output, "PRESETS") ||
+		!strings.Contains(output, "EXAMPLES") {
+		t.Errorf("usage should contain USAGE, FLAGS, SYNTAX, PRESETS, and EXAMPLES")
+	}
 }
 
 func TestMain(m *testing.M) {
