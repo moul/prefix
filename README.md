@@ -52,6 +52,7 @@ SYNTAX
 
 PRESETS
   {{DEFAULT}}          {{.LineNumber3}} up={{.ShortUptime}} d={{.ShortDuration}} |
+  {{SHORT_DATE}}       {{now | date "06/02/01 15:04:05"}}
   {{SLOW_LINES}}       {{if (gt .Duration 1000000000)}}SLOW{{else}}    {{end}} {{.Duration | short_duration}} 
 
 EXAMPLES
@@ -64,16 +65,16 @@ EXAMPLES
 [embedmd]:# (.tmp/example-1.txt console)
 ```console
 foo@bar:~$ generate-fake-data | prefix -format="#{{.LineNumber3}} {{.ShortUptime}} {{.ShortDuration}} | "
-#1   44.5µs  48.3µs  | At illum ut est sit soluta nulla numquam.
-#2   112ms   112ms   | Sunt quaerat ea dolores facere deleniti culpa numquam.
-#3   327ms   215ms   | Distinctio maxime consequatur est qui corporis sunt officia.
-#4   605.4ms 278.3ms | Et quia odit molestias voluptas porro repellendus magnam.
-#5   897.7ms 292.3ms | Corporis eos rem non hic esse optio quisquam.
-#6   1.1s    211.6ms | Natus earum molestias iste architecto porro et blanditiis.
-#7   1.3s    238.3ms | Eum repellendus nostrum qui eius suscipit fugit quia.
+#1   81.1µs  93.3µs  | At illum ut est sit soluta nulla numquam.
+#2   113.8ms 113.7ms | Sunt quaerat ea dolores facere deleniti culpa numquam.
+#3   328.7ms 214.9ms | Distinctio maxime consequatur est qui corporis sunt officia.
+#4   607ms   278.3ms | Et quia odit molestias voluptas porro repellendus magnam.
+#5   899.2ms 292.2ms | Corporis eos rem non hic esse optio quisquam.
+#6   1.1s    211.5ms | Natus earum molestias iste architecto porro et blanditiis.
+#7   1.3s    238.2ms | Eum repellendus nostrum qui eius suscipit fugit quia.
 #8   1.4s    50.5ms  | Et nesciunt quod fuga ut vel pariatur libero.
 #9   1.6s    209.9ms | Rerum omnis soluta facilis voluptatem possimus et voluptas.
-#10  1.9s    274.7ms | Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
+#10  1.9s    274.8ms | Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
 ```
 
 [embedmd]:# (.tmp/example-2.txt console)
@@ -109,17 +110,33 @@ foo@bar:~$ generate-fake-data | prefix -format=">>> "
 [embedmd]:# (.tmp/example-4.txt console)
 ```console
 foo@bar:~$ generate-fake-data | prefix -format="{{SLOW_LINES}} up={{.ShortUptime}} | "
-     109.3µs  up=129.7µs | Rerum natus quo quo explicabo tempore et delectus.
+     90.5µs   up=121.2µs | Rerum natus quo quo explicabo tempore et delectus.
 SLOW 1s       up=1s      | Dolor blanditiis voluptas dolorum sint laudantium eveniet amet.
 SLOW 1.3s     up=2.4s    | Qui asperiores molestiae est quia est eum omnis.
 SLOW 1.3s     up=3.6s    | Illum explicabo aut illum iste pariatur aut laudantium.
-     982.1ms  up=4.6s    | Quibusdam asperiores consequatur est dolores quas dolor ipsam.
+     982.2ms  up=4.6s    | Quibusdam asperiores consequatur est dolores quas dolor ipsam.
      185.4ms  up=4.8s    | Possimus qui non rem qui cum sit temporibus.
-     167.5ms  up=5s      | Ea debitis sit deleniti cum ut adipisci in.
-     520.5ms  up=5.5s    | Eveniet molestias voluptatem voluptatem deserunt nisi tempora iusto.
-     215.1ms  up=5.7s    | Fugiat minus quam eos voluptatem labore sit velit.
+     167.4ms  up=5s      | Ea debitis sit deleniti cum ut adipisci in.
+     520.4ms  up=5.5s    | Eveniet molestias voluptatem voluptatem deserunt nisi tempora iusto.
+     215ms    up=5.7s    | Fugiat minus quam eos voluptatem labore sit velit.
 SLOW 1s       up=6.7s    | Enim aut autem tenetur fugit minima quo atque.
 ```
+
+[embedmd]:# (.tmp/example-5.txt console)
+```console
+foo@bar:~$ generate-fake-data | prefix -format="{{SHORT_DATE}} "
+20/17/09 15:39:36 At illum ut est sit soluta nulla numquam.
+20/17/09 15:39:36 Sunt quaerat ea dolores facere deleniti culpa numquam.
+20/17/09 15:39:37 Distinctio maxime consequatur est qui corporis sunt officia.
+20/17/09 15:39:39 Et quia odit molestias voluptas porro repellendus magnam.
+20/17/09 15:39:40 Corporis eos rem non hic esse optio quisquam.
+20/17/09 15:39:41 Natus earum molestias iste architecto porro et blanditiis.
+20/17/09 15:39:42 Eum repellendus nostrum qui eius suscipit fugit quia.
+20/17/09 15:39:43 Et nesciunt quod fuga ut vel pariatur libero.
+20/17/09 15:39:44 Rerum omnis soluta facilis voluptatem possimus et voluptas.
+20/17/09 15:39:45 Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
+```
+
 
 ## Install
 

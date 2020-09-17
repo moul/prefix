@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"strings"
 	"testing"
 
@@ -56,8 +57,8 @@ func TestUsage(t *testing.T) {
 
 	// simulate CLI call
 	err := run([]string{"prefix", "-h"})
-	if err != nil {
-		t.Fatalf("err should be nil: %v", err)
+	if err != flag.ErrHelp {
+		t.Fatalf("err should be flag.ErrHelp: %v", err)
 	}
 
 	// ignore output in this test
