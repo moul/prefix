@@ -27,5 +27,8 @@ generate: install
 	echo 'foo@bar:~$$ generate-fake-data | prefix -format="{{SLOW_LINES}} up={{.ShortUptime}} | "' > .tmp/example-4.txt
 	generate-fake-data --seed=4242 --lines=10 --sleep-max=1.5s --dict=lorem-ipsum --no-stderr | prefix --format="{{SLOW_LINES}} up={{.ShortUptime}} | " >> .tmp/example-4.txt
 
+	echo 'foo@bar:~$$ generate-fake-data | prefix -format="{{SHORT_DATE}} "' > .tmp/example-5.txt
+	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr --sleep-max=1.5s | prefix --format="{{SHORT_DATE}} " >> .tmp/example-5.txt
+
 	embedmd -w README.md
 	#rm -rf .tmp

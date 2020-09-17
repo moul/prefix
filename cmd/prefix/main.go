@@ -22,7 +22,7 @@ func main() {
 }
 
 var (
-	flags  = flag.NewFlagSet("prefix", flag.ExitOnError)
+	flags  = flag.NewFlagSet("prefix", flag.ContinueOnError)
 	format = flags.String("format", "{{DEFAULT}} ", "format string")
 )
 

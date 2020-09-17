@@ -40,6 +40,7 @@ var AvailablePatterns = map[string]string{
 var AvailablePresets = map[string]string{
 	"{{DEFAULT}}":    `{{.LineNumber3}} up={{.ShortUptime}} d={{.ShortDuration}} |`,
 	"{{SLOW_LINES}}": `{{if (gt .Duration 1000000000)}}SLOW{{else}}    {{end}} {{.Duration | short_duration}} `,
+	"{{SHORT_DATE}}": `{{now | date "06/02/01 15:04:05"}}`,
 }
 
 type LinePrefixer interface {
