@@ -10,7 +10,7 @@ generate: install
 	GO111MODULE=off go get moul.io/generate-fake-data
 
 	echo 'foo@bar:~$$ prefix -h' > .tmp/usage.txt
-	prefix -h 2>> .tmp/usage.txt
+	(prefix -h || true) 2>> .tmp/usage.txt
 
 	echo 'foo@bar:~$$ generate-fake-data | prefix' > .tmp/default.txt
 	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr | prefix >> .tmp/default.txt
