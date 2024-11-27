@@ -9,6 +9,6 @@ require (
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/mitchellh/reflectwalk v1.0.1 // indirect
 	go.uber.org/goleak v1.1.10
-	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	moul.io/u v1.22.0
 )
