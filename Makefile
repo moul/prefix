@@ -1,4 +1,4 @@
-.PHONY: all build test clean install lint generate
+.PHONY: all build test test-norace clean install lint generate
 
 all: test build
 
@@ -7,6 +7,9 @@ build:
 
 test:
 	go test -v -race -coverprofile=coverage.out ./...
+
+test-norace:
+	go test -v -coverprofile=coverage.out ./...
 
 coverage: test
 	go tool cover -html=coverage.out -o coverage.html

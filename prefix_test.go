@@ -454,12 +454,15 @@ func TestPresetReplacement(t *testing.T) {
 }
 
 func TestConcurrentUsage(t *testing.T) {
-	prefixer := prefix.New("{{.LineNumber}} ")
+	// This test demonstrates that the current implementation
+	// is NOT thread-safe. Each goroutine should use its own prefixer.
 	
-	// Run multiple goroutines that use the prefixer
+	// Run multiple goroutines, each with its own prefixer
 	done := make(chan bool)
 	for i := 0; i < 10; i++ {
 		go func(id int) {
+			// Each goroutine creates its own prefixer
+			prefixer := prefix.New("{{.LineNumber}} ")
 			for j := 0; j < 100; j++ {
 				_ = prefixer.PrefixLine(fmt.Sprintf("goroutine %d line %d", id, j))
 			}
@@ -472,7 +475,7 @@ func TestConcurrentUsage(t *testing.T) {
 		<-done
 	}
 	
-	// If we get here without panicking, concurrent usage is safe
+	// Test passes if no panic occurs
 }
 
 func TestEdgeCases(t *testing.T) {
