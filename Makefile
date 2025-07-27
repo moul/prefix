@@ -1,34 +1,26 @@
-GOPKG ?=	moul.io/prefix
-DOCKER_IMAGE ?=	moul/prefix
-GOBINS ?=	./cmd/prefix
-NPM_PACKAGES ?=	.
+.PHONY: all build test clean install lint
 
-include rules.mk
+all: test build
 
-generate: install
-	mkdir -p .tmp
-	GO111MODULE=off go get moul.io/generate-fake-data
+build:
+	go build -o bin/prefix ./cmd/prefix
 
-	echo 'foo@bar:~$$ prefix -h' > .tmp/usage.txt
-	(prefix -h || true) 2>> .tmp/usage.txt
+test:
+	go test -v -race -coverprofile=coverage.out ./...
 
-	echo 'foo@bar:~$$ generate-fake-data | prefix' > .tmp/default.txt
-	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr | prefix >> .tmp/default.txt
+coverage: test
+	go tool cover -html=coverage.out -o coverage.html
 
-	echo 'foo@bar:~$$ generate-fake-data | prefix -format="#{{.LineNumber3}} {{.ShortUptime}} {{.ShortDuration}} | "' > .tmp/example-1.txt
-	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr | prefix --format="#{{.LineNumber3}} {{.ShortUptime}} {{.ShortDuration}} | " >> .tmp/example-1.txt
+clean:
+	rm -rf bin/ coverage.out coverage.html
 
-	echo 'foo@bar:~$$ generate-fake-data | prefix -format="{{.LineNumber3}} "' > .tmp/example-2.txt
-	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr --sleep-max=0 | prefix --format="{{.LineNumber3}} " >> .tmp/example-2.txt
+install:
+	go install ./cmd/prefix
 
-	echo 'foo@bar:~$$ generate-fake-data | prefix -format=">>> "' > .tmp/example-3.txt
-	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr --sleep-max=0 | prefix --format=">>> " >> .tmp/example-3.txt
+lint:
+	golangci-lint run
 
-	echo 'foo@bar:~$$ generate-fake-data | prefix -format="{{SLOW_LINES}} up={{.ShortUptime}} | "' > .tmp/example-4.txt
-	generate-fake-data --seed=4242 --lines=10 --sleep-max=1.5s --dict=lorem-ipsum --no-stderr | prefix --format="{{SLOW_LINES}} up={{.ShortUptime}} | " >> .tmp/example-4.txt
+docker:
+	docker build -t prefix .
 
-	echo 'foo@bar:~$$ generate-fake-data | prefix -format="{{SHORT_DATE}} "' > .tmp/example-5.txt
-	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr --sleep-max=1.5s | prefix --format="{{SHORT_DATE}} " >> .tmp/example-5.txt
-
-	embedmd -w README.md
-	#rm -rf .tmp
+.DEFAULT_GOAL := all
