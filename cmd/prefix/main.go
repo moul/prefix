@@ -17,13 +17,14 @@ func main() {
 		if err != flag.ErrHelp {
 			log.Fatalf("error: %v", err)
 		}
-		os.Exit(1)
+		osExit(1)
 	}
 }
 
 var (
 	flags  = flag.NewFlagSet("prefix", flag.ContinueOnError)
 	format = flags.String("format", "{{DEFAULT}} ", "format string")
+	osExit = os.Exit // Allow mocking in tests
 )
 
 func run(args []string) error {
@@ -49,8 +50,8 @@ func run(args []string) error {
 			}
 			defer f.Close()
 			input = f
-		case len(remainingArgs) > 2:
-			return fmt.Errorf("usage: prefix FILE")
+		case len(remainingArgs) > 1:
+			return fmt.Errorf("multi files support not supported yet")
 		}
 	}
 
