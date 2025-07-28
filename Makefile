@@ -1,13 +1,34 @@
-GOPKG ?=	moul.io/prefix
-DOCKER_IMAGE ?=	moul/prefix
-GOBINS ?=	./cmd/prefix
-NPM_PACKAGES ?=	.
+.PHONY: all build test test-norace clean install lint generate
 
-include rules.mk
+all: test build
+
+build:
+	go build -o bin/prefix ./cmd/prefix
+
+test:
+	go test -v -race -coverprofile=coverage.out ./...
+
+test-norace:
+	go test -v -coverprofile=coverage.out ./...
+
+coverage: test
+	go tool cover -html=coverage.out -o coverage.html
+
+clean:
+	rm -rf bin/ coverage.out coverage.html
+
+install:
+	go install ./cmd/prefix
+
+lint:
+	golangci-lint run
+
+docker:
+	docker build -t prefix .
 
 generate: install
 	mkdir -p .tmp
-	GO111MODULE=off go get moul.io/generate-fake-data
+	@command -v generate-fake-data >/dev/null 2>&1 || go install moul.io/generate-fake-data@latest
 
 	echo 'foo@bar:~$$ prefix -h' > .tmp/usage.txt
 	(prefix -h || true) 2>> .tmp/usage.txt
@@ -30,5 +51,6 @@ generate: install
 	echo 'foo@bar:~$$ generate-fake-data | prefix -format="{{SHORT_DATE}} "' > .tmp/example-5.txt
 	generate-fake-data --seed=42 --lines=10 --dict=lorem-ipsum --no-stderr --sleep-max=1.5s | prefix --format="{{SHORT_DATE}} " >> .tmp/example-5.txt
 
-	embedmd -w README.md
-	#rm -rf .tmp
+	@command -v embedmd >/dev/null 2>&1 && embedmd -w README.md || echo "embedmd not found, skipping README update"
+
+.DEFAULT_GOAL := all

@@ -1,35 +1,41 @@
-##
-## Specific to .dockerignore
-##
-
+# Git files
 .git/
-Dockerfile
-contrib/
+.gitignore
+.gitattributes
+.githooks/
 
-##
-## Common with .gitignore
-##
+# CI/CD
+.github/
+.goreleaser.yml
+.golangci.yml
+.releaserc.js
+
+# Documentation
+*.md
+LICENSE*
+AUTHORS
+COPYRIGHT
+doc.go
+
+# Development files
+Makefile
+coverage.*
+*.test
+*.out
+bin/
 
 # Temporary files
+.tmp/
 *~
 *#
 .#*
 
-# Vendors
-node_modules/
-vendor/
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Binaries for programs and plugins
-dist/
-gin-bin
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# Test binary, build with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+# OS files
+.DS_Store
+Thumbs.db

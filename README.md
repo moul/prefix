@@ -65,16 +65,16 @@ EXAMPLES
 [embedmd]:# (.tmp/example-1.txt console)
 ```console
 foo@bar:~$ generate-fake-data | prefix -format="#{{.LineNumber3}} {{.ShortUptime}} {{.ShortDuration}} | "
-#1   73.6µs  80.9µs  | At illum ut est sit soluta nulla numquam.
-#2   112ms   111.9ms | Sunt quaerat ea dolores facere deleniti culpa numquam.
-#3   327.1ms 215.1ms | Distinctio maxime consequatur est qui corporis sunt officia.
-#4   605.3ms 278.2ms | Et quia odit molestias voluptas porro repellendus magnam.
-#5   897.7ms 292.3ms | Corporis eos rem non hic esse optio quisquam.
-#6   1.1s    211.7ms | Natus earum molestias iste architecto porro et blanditiis.
-#7   1.3s    238.2ms | Eum repellendus nostrum qui eius suscipit fugit quia.
-#8   1.4s    50.6ms  | Et nesciunt quod fuga ut vel pariatur libero.
-#9   1.6s    209.6ms | Rerum omnis soluta facilis voluptatem possimus et voluptas.
-#10  1.9s    274.7ms | Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
+#1   378.1µs 387.9µs | At illum ut est sit soluta nulla numquam.
+#2   111.7ms 111.3ms | Sunt quaerat ea dolores facere deleniti culpa numquam.
+#3   327.2ms 215.5ms | Distinctio maxime consequatur est qui corporis sunt officia.
+#4   605.8ms 278.6ms | Et quia odit molestias voluptas porro repellendus magnam.
+#5   898.1ms 292.4ms | Corporis eos rem non hic esse optio quisquam.
+#6   1.1s    212.4ms | Natus earum molestias iste architecto porro et blanditiis.
+#7   1.3s    238.3ms | Eum repellendus nostrum qui eius suscipit fugit quia.
+#8   1.4s    51.2ms  | Et nesciunt quod fuga ut vel pariatur libero.
+#9   1.6s    210.4ms | Rerum omnis soluta facilis voluptatem possimus et voluptas.
+#10  1.9s    275.6ms | Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
 ```
 
 [embedmd]:# (.tmp/example-2.txt console)
@@ -110,31 +110,31 @@ foo@bar:~$ generate-fake-data | prefix -format=">>> "
 [embedmd]:# (.tmp/example-4.txt console)
 ```console
 foo@bar:~$ generate-fake-data | prefix -format="{{SLOW_LINES}} up={{.ShortUptime}} | "
-     876.7µs  up=892.6µs | Rerum natus quo quo explicabo tempore et delectus.
-SLOW 1s       up=1.1s    | Dolor blanditiis voluptas dolorum sint laudantium eveniet amet.
+     323.9µs  up=353.8µs | Rerum natus quo quo explicabo tempore et delectus.
+SLOW 1s       up=1s      | Dolor blanditiis voluptas dolorum sint laudantium eveniet amet.
 SLOW 1.3s     up=2.4s    | Qui asperiores molestiae est quia est eum omnis.
 SLOW 1.3s     up=3.6s    | Illum explicabo aut illum iste pariatur aut laudantium.
-     982.2ms  up=4.6s    | Quibusdam asperiores consequatur est dolores quas dolor ipsam.
-     185.5ms  up=4.8s    | Possimus qui non rem qui cum sit temporibus.
-     167.5ms  up=5s      | Ea debitis sit deleniti cum ut adipisci in.
-     520.3ms  up=5.5s    | Eveniet molestias voluptatem voluptatem deserunt nisi tempora iusto.
-     215ms    up=5.7s    | Fugiat minus quam eos voluptatem labore sit velit.
+     982.4ms  up=4.6s    | Quibusdam asperiores consequatur est dolores quas dolor ipsam.
+     185.3ms  up=4.8s    | Possimus qui non rem qui cum sit temporibus.
+     167.4ms  up=5s      | Ea debitis sit deleniti cum ut adipisci in.
+     520.5ms  up=5.5s    | Eveniet molestias voluptatem voluptatem deserunt nisi tempora iusto.
+     215.5ms  up=5.7s    | Fugiat minus quam eos voluptatem labore sit velit.
 SLOW 1s       up=6.7s    | Enim aut autem tenetur fugit minima quo atque.
 ```
 
 [embedmd]:# (.tmp/example-5.txt console)
 ```console
 foo@bar:~$ generate-fake-data | prefix -format="{{SHORT_DATE}} "
-20/19/09 00:02:43 At illum ut est sit soluta nulla numquam.
-20/19/09 00:02:44 Sunt quaerat ea dolores facere deleniti culpa numquam.
-20/19/09 00:02:45 Distinctio maxime consequatur est qui corporis sunt officia.
-20/19/09 00:02:46 Et quia odit molestias voluptas porro repellendus magnam.
-20/19/09 00:02:48 Corporis eos rem non hic esse optio quisquam.
-20/19/09 00:02:49 Natus earum molestias iste architecto porro et blanditiis.
-20/19/09 00:02:50 Eum repellendus nostrum qui eius suscipit fugit quia.
-20/19/09 00:02:50 Et nesciunt quod fuga ut vel pariatur libero.
-20/19/09 00:02:51 Rerum omnis soluta facilis voluptatem possimus et voluptas.
-20/19/09 00:02:53 Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
+25/27/07 04:10:30 At illum ut est sit soluta nulla numquam.
+25/27/07 04:10:31 Sunt quaerat ea dolores facere deleniti culpa numquam.
+25/27/07 04:10:32 Distinctio maxime consequatur est qui corporis sunt officia.
+25/27/07 04:10:33 Et quia odit molestias voluptas porro repellendus magnam.
+25/27/07 04:10:35 Corporis eos rem non hic esse optio quisquam.
+25/27/07 04:10:36 Natus earum molestias iste architecto porro et blanditiis.
+25/27/07 04:10:37 Eum repellendus nostrum qui eius suscipit fugit quia.
+25/27/07 04:10:37 Et nesciunt quod fuga ut vel pariatur libero.
+25/27/07 04:10:38 Rerum omnis soluta facilis voluptatem possimus et voluptas.
+25/27/07 04:10:40 Possimus harum voluptatibus aperiam voluptatibus qui autem quam.
 ```
 
 

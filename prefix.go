@@ -65,7 +65,7 @@ func (p *linePrefixer) String() string {
 // New returns an initialized LinePrefixer.
 func New(format string) LinePrefixer {
 	if format == "" {
-		format = AvailablePresets["{{DEFAULT}} "]
+		format = "{{DEFAULT}} "
 	}
 
 	// apply presets

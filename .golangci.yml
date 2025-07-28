@@ -1,5 +1,5 @@
 run:
-  deadline: 1m
+  timeout: 1m
   tests: false
   skip-files:
     - "testing.go"
@@ -7,10 +7,6 @@ run:
     - ".*\\.gen\\.go"
 
 linters-settings:
-  golint:
-    min-confidence: 0
-  maligned:
-    suggest-new: true
   goconst:
     min-len: 5
     min-occurrences: 4
@@ -21,7 +17,6 @@ linters:
   disable-all: true
   enable:
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
     - dupl
@@ -34,22 +29,17 @@ linters:
     - gocyclo
     - gofmt
     - goimports
-    - golint
+    - revive
     - gosimple
     - govet
     - ineffassign
-    - interfacer
-    - maligned
     - misspell
     - nakedret
     - prealloc
-    - scopelint
     - staticcheck
-    - structcheck
     #- stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - whitespace

@@ -1,168 +1,110 @@
 name: Go
 on:
   push:
-    tags:
-      - v*
     branches:
       - master
-    paths:
-      - '**.go'
-      - ".goreleaser.yml"
-      - ".golangci.yml"
-      - ".dockerignore"
-      - "Makefile"
-      - "rules.mk"
-      - "go.*"
-      - ".github/workflows/go.yml"
+      - main
   pull_request:
-    paths:
-      - '**.go'
-      - ".goreleaser.yml"
-      - ".golangci.yml"
-      - ".dockerignore"
-      - "Makefile"
-      - "rules.mk"
-      - "go.*"
-      - ".github/workflows/go.yml"
 
 jobs:
-  docker-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile
-  goreleaser:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        go: ['1.21', '1.22', '1.23']
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v4
+      
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.15.1
-      - name: Cache Go modules
-        uses: actions/cache@v2.1.6
+          go-version: ${{ matrix.go }}
+          cache: true
+      
+      - name: Run tests
+        run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+      
+      - name: Upload coverage to Codecov
+        if: matrix.os == 'ubuntu-latest' && matrix.go == '1.23'
+        uses: codecov/codecov-action@v4
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-      - name: Run GoReleaser (Dry Run)
-        uses: goreleaser/goreleaser-action@v2.6.1
-        with:
-          version: latest
-          args: release --rm-dist --snapshot --skip-publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          file: ./coverage.out
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   golangci-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2.5.2
+        uses: golangci/golangci-lint-action@v6
         with:
-          version: v1.28
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          args: --timeout=2m
-          only-new-issues: false
-          working-directory: .
-  tests-on-windows:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        golang:
-          - 1.15.1
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.golang }}
-      - name: Run tests on Windows
-        run: make.exe unittest
-        continue-on-error: true
-  tests-on-mac:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        golang:
-          - 1.15
-    env:
-      OS: macos-latest
-      GOLANG: ${{ matrix.golang }}
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v2.1.6
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.golang }}-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-${{ matrix.golang }}-
-      - name: Compile the project
-        run: make go.install
-      - name: Run tests on Unix-like operating systems
-        run: make unittest
-      - name: Check go.mod and go.sum
-        run: |
-          go mod tidy -v
-          git --no-pager diff go.mod go.sum
-          git --no-pager diff --quiet go.mod go.sum
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.5.2
-        with:
-          #token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.txt
-          flags: unittests
-          env_vars: OS,GOLANG
-          name: codecov-umbrella
-          fail_ci_if_error: false
-  tests-on-linux:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
+          version: latest
+          args: --timeout=5m
+
+  security:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        golang:
-          - 1.12.17
-          - 1.13.15
-          - 1.14.7
-          - 1.15.1
-    env:
-      OS: ubuntu-latest
-      GOLANG: ${{ matrix.golang }}
+    permissions:
+      security-events: write
     steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Install Go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v2.1.6
+          go-version: '1.23'
+          cache: true
+      
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.golang }}-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-${{ matrix.golang }}-
-      - name: Compile the project
-        run: make go.install
-      - name: Check go.mod and go.sum
-        run: |
-          go mod tidy -v
-          git --no-pager diff go.mod go.sum
-          git --no-pager diff --quiet go.mod go.sum
-      - name: Run tests on Unix-like operating systems
-        run: make unittest
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.5.2
+          args: '-no-fail -fmt sarif -out results.sarif ./...'
+      
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          #token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.txt
-          flags: unittests
-          env_vars: OS,GOLANG
-          name: codecov-umbrella
-          fail_ci_if_error: false
+          sarif_file: results.sarif
+      
+      - name: Run vulnerability check
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest && govulncheck ./...
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  goreleaser-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
+      
+      - name: Run GoReleaser (Dry Run)
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: latest
+          args: check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
